@@ -1,15 +1,18 @@
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
-// import * as sqs from 'aws-cdk-lib/aws-sqs';
-import * as s3 from 'aws-cdk-lib/aws-s3'
+import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
+import { Runtime } from 'aws-cdk-lib/aws-lambda';
+import { join } from 'path';
 
 export class FirstCdkTsStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-      new s3.Bucket(this, 'My-Bucket',{
-        autoDeleteObjects: true,
-        removalPolicy: cdk.RemovalPolicy.DESTROY
-      })
+    const testLambda = new NodejsFunction(this, 'TestLambda', {
+      runtime: Runtime.NODEJS_18_X,
+      handler: 'handler',
+      entry: join(__dirname, 'handler.js')
+    })
+
   }
 }
